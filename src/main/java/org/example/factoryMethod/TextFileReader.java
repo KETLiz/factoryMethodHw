@@ -3,8 +3,7 @@ package org.example.factoryMethod;
 import org.example.LogEntry;
 import org.example.LogReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -30,14 +29,13 @@ public class TextFileReader extends LogReader {
     @Override
     protected Iterable<String> readEntries(Integer position) {
         List<String> text = new ArrayList<>();
-        try {
-            Scanner sc = new Scanner(new File(fileName));
-            while(sc.hasNextLine()) {
-                text.add(sc.nextLine());
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while((line = br.readLine()) != null) {
+                text.add(line);
             }
-            sc.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Файл с именем " + fileName + " не найден");
+        } catch (IOException e) {
+            System.out.println("Что-то пошло не так");
         }
         return text;
     }

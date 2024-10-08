@@ -1,5 +1,7 @@
 package org.example;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public abstract class LogReader {
         this.currentPosition = currentPosition;
     }
 
-    public Iterable<LogEntry> readLogEntry() {
+    public Iterable<LogEntry> readLogEntry() throws IOException {
         List<LogEntry> logList = new ArrayList<>();
         for(String str : readEntries(currentPosition)) {
             logList.add(parseLogEntry(str));
@@ -29,7 +31,7 @@ public abstract class LogReader {
 
     public abstract void setDataSource(Object data);
 
-    protected abstract Iterable<String> readEntries(Integer position);
+    protected abstract Iterable<String> readEntries(Integer position) throws IOException;
 
     protected abstract LogEntry parseLogEntry(String stringEntry);
 

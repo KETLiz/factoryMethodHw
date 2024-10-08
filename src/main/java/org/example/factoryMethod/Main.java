@@ -4,6 +4,9 @@ import org.example.LogEntry;
 import org.example.LogReader;
 import org.example.PoemReader;
 
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -15,24 +18,41 @@ public class Main {
             "Навстречу северной Авроры,\n" +
             "Звездою севера явись!";
 
-    static String fileName = "factoryMethodHw/src/main/org/example/file.txt";
+    static String fileName = "C:\\Users\\Liza\\IdeaProjects\\Architecture\\factoryMethodHw\\" +
+            "src\\main\\java\\org\\example\\factoryMethod\\file.txt";
 
-    public static void main(String[] args) {
+    static String connectToMysqlAddress = "jdbc:mysql://localhost:3306?user=root&password=qwer";
 
-//        LogReader reader = new ConcreateReaderCretor()
-//                .createLogReader(LogType.Poem, str);
-//
-//        for(LogEntry log : reader.readLogEntry()) {
-//            System.out.println(log.getText());
-//        }
+    public static void main(String[] args) throws IOException, SQLException {
+
+        LogReader reader = new ConcreateReaderCretor()
+                .createLogReader(LogType.Poem, str);
+
+        for(LogEntry log : reader.readLogEntry()) {
+            System.out.println(log.getText());
+        }
 
         System.out.println();
 
         LogReader reader2 = new ConcreateReaderCretor()
                 .createLogReader(LogType.Text, fileName);
 
-        for(LogEntry log : reader2.readLogEntry()) {
-            System.out.println(log.getText());
+        Iterable<LogEntry> log = reader2.readLogEntry();
+
+        for(LogEntry l : log) {
+            System.out.println(l.getText());
         }
+
+        System.out.println();
+
+        LogReader dbReader = new ConcreateReaderCretor()
+                .createLogReader(LogType.DataBase, connectToMysqlAddress);
+
+        Iterable<LogEntry> dbLog = dbReader.readLogEntry();
+
+        for(LogEntry l : dbLog) {
+            System.out.println(l.getText());
+        }
+
     }
 }
